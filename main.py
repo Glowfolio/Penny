@@ -92,8 +92,7 @@ def collectdata():
     for i in range(count):
         i = np.array([[i]])
         linear = lin.predict(i)[0]
-        polyno = pol.predict(poly.fit_transform(i))[0]
-        err.append(linear - polyno)
+        err.append(linear - close[i][0][0])
     mean = stats.mean(err)
     stdev = stats.stdev(err)
 
