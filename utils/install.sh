@@ -30,6 +30,42 @@ fi
 git clone "$REPO_URL" "$INSTALL_DIR"
 INSTALL_DIR=$(realpath "$INSTALL_DIR")
 
+chmod +x "$INSTALL_DIR/utils/update.sh"
+chmod +x "$INSTALL_DIR/utils/install.sh"
+echo "files installed to $INSTALL_DIR"
+
+# Create systemd service file
+cat > /etc/systemd/system/penny-update.service << 'EOF'
+[Unit]
+Description=Update Penny Git Repository
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sudo /etc/penny/update.sh
+User=root
+EOF
+
+# Create systemd timer file
+cat > /etc/systemd/system/penny-update.timer << 'EOF'
+[Unit]
+Description=Run Penny Update Every 5 Minutes
+Requires=penny-update.service
+
+[Timer]
+OnCalendar=*:0/5
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+
+# Reload systemd and start timer
+systemctl daemon-reload
+systemctl enable penny-update.timer
+systemctl start penny-update.timer
+
+echo "Update service created and started. Runs every 5 minutes."
 
 
 
