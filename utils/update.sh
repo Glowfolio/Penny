@@ -12,7 +12,7 @@ git checkout main
 
 # Pull the latest changes
 echo "Pulling latest changes..."
-if git pull origin "$CURRENT_BRANCH"; then
+if git pull; then
     echo "Successfully updated repository"
     echo "Updated from commit $LOCAL to $REMOTE"
 else
