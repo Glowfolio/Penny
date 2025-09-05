@@ -42,7 +42,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/sudo /etc/penny/update.sh
+ExecStart=/usr/bin/sudo /etc/penny/utils/update.sh
 User=root
 EOF
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /etc/penny
+
 if git fetch origin; then
     echo "Successfully fetched changes from remote"
 else
