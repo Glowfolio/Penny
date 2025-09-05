@@ -118,38 +118,38 @@ def collectdata():
     }
 
 def sendalert():
-    if data['zscore'] > config['zlimit']:
+    # if data['zscore'] > config['zlimit']:
         # Send Alert
-        plt.plot(data['x'], data['close'], color='red', label='Actual')
-        plt.plot(data['x'], data['pol'].predict(data['poly'].fit_transform(data['x'])),
-                color='blue', label='PolyReg')
-        plt.plot(data['x'], data['lin'].predict(data['x']), color='green', label='LinReg')
-        plt.xlabel('Days')
-        plt.ylabel('Price')
-        plt.legend()
-        filename = "stockplot.png"
-        plt.savefig(filename, dpi=300, bbox_inches='tight', facecolor='#ababab', transparent=True)
-        plt.close() 
+    plt.plot(data['x'], data['close'], color='red', label='Actual')
+    plt.plot(data['x'], data['pol'].predict(data['poly'].fit_transform(data['x'])),
+            color='blue', label='PolyReg')
+    plt.plot(data['x'], data['lin'].predict(data['x']), color='green', label='LinReg')
+    plt.xlabel('Days')
+    plt.ylabel('Price')
+    plt.legend()
+    filename = "stockplot.png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight', facecolor='#ababab', transparent=True)
+    plt.close() 
 
-        content = f"""
-    Last price: ${data['cps'][-1]:.2f}
-    Predicted price: ${data['polyguess']:.2f}
-    Z-Score: {data['zscore']:.2f}
-    """
-        webhook = DiscordWebhook(url=config['webhook_url'], content=f"It's a great time to buy {config['symbol']}") #
-        with open(filename, "rb") as f:
-            webhook.add_file(file=f.read(), filename=filename) #
-        embed = DiscordEmbed(title=config['symbol'], description=content, color="03b2f8")
-        embed.set_image(url=f"attachment://{filename}")  #
-        webhook.add_embed(embed)  
-        response = webhook.execute() 
-        os.remove(filename)
+    content = f"""
+Last price: ${data['cps'][-1]:.2f}
+Predicted price: ${data['polyguess']:.2f}
+Z-Score: {data['zscore']:.2f}
+"""
+    webhook = DiscordWebhook(url=config['webhook_url'], content=f"It's a great time to buy {config['symbol']}") #
+    with open(filename, "rb") as f:
+        webhook.add_file(file=f.read(), filename=filename) #
+    embed = DiscordEmbed(title=config['symbol'], description=content, color="03b2f8")
+    embed.set_image(url=f"attachment://{filename}")  #
+    webhook.add_embed(embed)  
+    response = webhook.execute() 
+    os.remove(filename)
 
-        if response and response.status_code in [200, 204]: 
-            print(f"Image sent to Discord - {time.ctime()}")
-        else:
-            print(f"Failed to send image to Discord. Status code: {response.status_code if response else 'N/A'}")
-            print(f"Response: {response.text if response else 'N/A'}")
+    if response and response.status_code in [200, 204]: 
+        print(f"Image sent to Discord - {time.ctime()}")
+    else:
+        print(f"Failed to send image to Discord. Status code: {response.status_code if response else 'N/A'}")
+        print(f"Response: {response.text if response else 'N/A'}")
 
 if __name__ == "__main__":
     configure()
