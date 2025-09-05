@@ -14,6 +14,10 @@ Using a simple machine learning regression algorithm, the program creates a line
 
 This software is developed using Python 3.11 and a Raspberry Pi 5. In order for this work as a self maintaining server, the pi should be powered with a consistent source and has a steady internet connection (poor connection speed may affect runtime).
 
+## Installaion
+
+Configure the raspberry pi to have network connection and download [install.sh](https://github.com/mastermind-mayhem/Penny/blob/main/utils/install.sh)
+
 
 ## Authors
 
