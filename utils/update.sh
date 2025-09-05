@@ -7,14 +7,8 @@ else
     exit 1
 fi
 
-# Check if there are updates available
-LOCAL=$(git rev-parse HEAD)
-REMOTE=$(git rev-parse "origin/$CURRENT_BRANCH")
-
-if [ "$LOCAL" = "$REMOTE" ]; then
-    echo "Repository is already up to date"
-    return 0
-fi
+git reset --hard
+git checkout main
 
 # Pull the latest changes
 echo "Pulling latest changes..."
@@ -25,3 +19,6 @@ else
     echo "ERROR: Failed to pull changes"
     exit 1
 fi
+
+chmod +x /etc/penny/utils/update.sh
+chmod +x /etc/penny/utils/install.sh
