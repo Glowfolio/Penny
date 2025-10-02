@@ -96,8 +96,7 @@ Description=Run Penny Python Script Every 5 Minutes
 Requires=penny-python.service
 
 [Timer]
-# OnCalendar=*-*-* 12:00:00
-OnCalendar=*:0/2 
+OnCalendar=*-*-* 12:00:00
 Persistent=true
 
 [Install]
