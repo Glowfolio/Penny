@@ -92,8 +92,26 @@ linguess = lin.predict(guess)[0]
 prederr = polyguess - linguess
 zscore = abs((prederr - mean) / stdev)
 
-# if data['zscore'] > config['zlimit']:
-    # Send Alert
+# Condition 1: linguess > actual latest value
+print(cps[-1], linguess)
+if linguess > cps[-1]:
+    webhook = DiscordWebhook(url=WEBHOOK_URL, content=f"Fail-Condition 1: High Close Price")
+    response = webhook.execute()
+    if response and response.status_code in [200, 204]:
+        print("Image Sent to Discord")
+    else:
+        print("Send Fail")
+    exit()
+# Condition 2: Z-score
+elif zscore >= zlimit:
+    webhook = DiscordWebhook(url=WEBHOOK_URL, content=f"Fail-Condition 2: Zscore Below Threshold")
+    response = webhook.execute()
+    if response and response.status_code in [200, 204]:
+        print("Image Sent to Discord")
+    else:
+        print("Send Fail")
+    exit()
+
 plt.plot(x, close, color='red', label='Actual')
 plt.plot(x, pol.predict(poly.fit_transform(x)),
         color='blue', label='PolyReg')
