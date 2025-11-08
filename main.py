@@ -91,11 +91,17 @@ polyguess = pol.predict(poly.fit_transform(guess))[0]
 linguess = lin.predict(guess)[0]
 prederr = polyguess - linguess
 zscore = abs((prederr - mean) / stdev)
+azscore = abs(((cps[-1] - linguess) - mean) / stdev)
+print(azscore)
 
 # Condition 1: linguess > actual latest value
 print(cps[-1], linguess)
-if linguess > cps[-1]:
-    webhook = DiscordWebhook(url=WEBHOOK_URL, content=f"Fail-Condition 1: High Close Price")
+if linguess < cps[-1]:
+    content = f"""Fail-Condition 1: Linear Regression Below Close Price
+Close Price: ${cps[-1]:.2f}
+Model Prediction: ${linguess:.2f}
+"""
+    webhook = DiscordWebhook(url=WEBHOOK_URL, content=content)
     response = webhook.execute()
     if response and response.status_code in [200, 204]:
         print("Image Sent to Discord")
@@ -103,8 +109,12 @@ if linguess > cps[-1]:
         print("Send Fail")
     exit()
 # Condition 2: Z-score
-elif zscore >= zlimit:
-    webhook = DiscordWebhook(url=WEBHOOK_URL, content=f"Fail-Condition 2: Zscore Below Threshold")
+elif azscore <= zlimit:
+    content = f"""Fail-Condition 2: Close Price Zscore Below Threshold
+Z-Score: {zscore:.2f}
+Z-Score Limit: {zlimit:.2f}
+"""
+    webhook = DiscordWebhook(url=WEBHOOK_URL, content=content)
     response = webhook.execute()
     if response and response.status_code in [200, 204]:
         print("Image Sent to Discord")
@@ -124,9 +134,9 @@ plt.savefig(filename, dpi=300, bbox_inches='tight', facecolor='#ababab', transpa
 plt.close() 
 
 content = f"""
-Last price: ${cps[-1]:.2f}
-Predicted price: ${polyguess:.2f}
-Z-Score: {zscore:.2f}
+Close Price: ${cps[-1]:.2f}
+Close Price Z-Score: {azscore:.2f}
+Predicted Price: ${polyguess:.2f}
 """
 webhook = DiscordWebhook(url=WEBHOOK_URL, content=f"It's a great time to buy {symbol}") #
 with open(filename, "rb") as f:
