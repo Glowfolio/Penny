@@ -98,7 +98,7 @@ for ssymbol in symbol:
     # Condition 1: linguess > actual latest value
     print(cps[-1], linguess)
     if linguess < cps[-1]:
-        content = f"""Fail-Condition 1: Linear Regression Below Close Price
+        content = f"""{ssymbol}  Fail-Condition 1: Linear Regression Below Close Price
     Close Price: ${cps[-1]:.2f}
     Model Prediction: ${linguess:.2f}
     """
@@ -111,7 +111,7 @@ for ssymbol in symbol:
         exit()
     # Condition 2: Z-score
     elif azscore <= zlimit:
-        content = f"""Fail-Condition 2: Close Price Zscore Below Threshold
+        content = f"""{ssymbol}  Fail-Condition 2: Close Price Zscore Below Threshold
     Z-Score: {zscore:.2f}
     Z-Score Limit: {zlimit:.2f}
     """
