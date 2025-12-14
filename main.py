@@ -108,7 +108,7 @@ for ssymbol in symbol:
             print("Image Sent to Discord")
         else:
             print("Send Fail")
-        exit()
+        continue
     # Condition 2: Z-score
     elif azscore <= zlimit:
         content = f"""{ssymbol}  Fail-Condition 2: Close Price Zscore Below Threshold
@@ -121,7 +121,7 @@ for ssymbol in symbol:
             print("Image Sent to Discord")
         else:
             print("Send Fail")
-        exit()
+        continue
 
     plt.plot(x, close, color='red', label='Actual')
     plt.plot(x, pol.predict(poly.fit_transform(x)),
